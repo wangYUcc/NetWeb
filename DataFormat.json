@@ -1,0 +1,33 @@
+﻿{
+  "Blog": {
+    "Title": "",
+    "Editor": "",
+    "CreateDate": "",
+    "UpdateDate": "",
+    "Content": ""
+  },
+  "Comic": {
+    "Title": "",
+    "CreateDate": "",
+    "UpdateDate": "",
+    "Editor": "",
+    "Type": "",
+    "Chapter": {
+      "Name": "",
+      "Num": "",
+      "Image": ""
+    }
+  },
+  "User": {
+    "Acount": "",
+    "Password": ""
+  },
+  "Mail": {
+    "Send": "",
+    "Recive": "",
+    "Title": "",
+    "Content": "",
+    "Attachment": ""
+  }
+  
+}
