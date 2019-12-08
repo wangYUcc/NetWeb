@@ -13,6 +13,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\PocoClassGenerator-master\PocoClassGenerator-master\PocoClassGenerator\PocoClassGenerator\PocoClassGenerator.csproj" />
+    <ProjectReference Include="..\Cmd\Cmd.csproj" />
+    <ProjectReference Include="..\Core\Core.csproj" />
+    <ProjectReference Include="..\Jop\Jop.csproj" />
+    <ProjectReference Include="..\Model\Model.csproj" />
     <ProjectReference Include="..\Node\Service.csproj" />
     <ProjectReference Include="..\SSH\Server.csproj" />
   </ItemGroup>

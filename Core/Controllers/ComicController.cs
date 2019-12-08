@@ -3,19 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Service;
 
 namespace Core.Controllers
 {
   [ApiController]
-  [Route("comic/[controller]")]
+  [Route("api/[controller]")]
   public class ComicController : Controller
     {
-    private ConnectDataBaseService _conn;
-
-    ComicController(ConnectDataBaseService conn )
+    private DapperConnectDBService _conn;
+    private readonly ILogger<ComicController> _logger;
+    ComicController(DapperConnectDBService conn , ILogger<ComicController> logger )
     {
       _conn = conn;
+      _logger = logger;
 
     }
         public IActionResult Index()

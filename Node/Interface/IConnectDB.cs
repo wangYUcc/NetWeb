@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace XUnitTest
+namespace Service.Interface
 {
-  class test2
-  {
-  }
+
 }

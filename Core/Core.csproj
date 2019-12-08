@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
@@ -7,7 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="Interface\" />
+    <Folder Include="Provider\" />
     <Folder Include="wwwroot\" />
+    <Folder Include="Attributes\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -15,11 +18,14 @@
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.4.10" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.9" />
-    <PackageReference Include="sqlSugarCore" Version="5.0.0.10" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Cmd\Cmd.csproj" />
+    <ProjectReference Include="..\Jop\Jop.csproj" />
+    <ProjectReference Include="..\Model\Model.csproj" />
     <ProjectReference Include="..\Node\Service.csproj" />
+    <ProjectReference Include="..\SSH\Server.csproj" />
   </ItemGroup>
 
 </Project>

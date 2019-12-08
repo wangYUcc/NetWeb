@@ -4,4 +4,9 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Dapper.Contrib" Version="2.0.30" />
+    <PackageReference Include="sqlSugarCore" Version="5.0.0.10" />
+  </ItemGroup>
+
 </Project>

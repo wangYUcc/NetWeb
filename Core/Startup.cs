@@ -1,11 +1,17 @@
 ﻿using Core.Extensions;
 using Hangfire;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
+using MySql.Data.MySqlClient;
 using Service;
+using Service.Interface;
+using SqlSugar;
+using System.Text;
 
 namespace Core
 {
@@ -22,8 +28,9 @@ namespace Core
     public void ConfigureServices(IServiceCollection services)
     {
       services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-      services.AddSingleton(new ConnectDataBaseService(Configuration.GetConnectionString("Mariadb")));
+      services.AddSingleton<IConnectionDatabase<SqlSugarClient>>(new SqlSugarConnectDBService(Configuration.GetConnectionString("Mariadb")));
       services.AddHangfire(Configuration.GetConnectionString("Mariadb"));
+      services.AddJWT(Configuration);
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -37,10 +44,11 @@ namespace Core
       {
         app.UseHsts();
       }
-    //  app.UseSerilogRequestLogging(); 
+      app.UseAuthentication();
+      //  app.UseSerilogRequestLogging(); 
       app.UseHttpsRedirection();
       app.UseHangfireDashboard();
-     // backgroundJobs.Enqueue(() => Console.WriteLine("Hello world from Hangfire!"));
+      // backgroundJobs.Enqueue(() => Console.WriteLine("Hello world from Hangfire!"));
       app.UseMvc();
     }
   }
