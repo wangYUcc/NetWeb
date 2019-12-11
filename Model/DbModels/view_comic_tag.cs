@@ -6,50 +6,42 @@ using SqlSugar;
 namespace Sugar.Enties
 {
     ///<summary>
-    ///
+    ///VIEW
     ///</summary>
-    [SugarTable("comic")]
-    public partial class comic
+    [SugarTable("view_comic_tag")]
+    public partial class view_comic_tag
     {
-           public comic(){
+           public view_comic_tag(){
 
 
            }
            /// <summary>
            /// Desc:
-           /// Default:
+           /// Default:0
            /// Nullable:False
            /// </summary>           
-           [SugarColumn(IsPrimaryKey=true,IsIdentity=true)]
            public int id {get;set;}
 
            /// <summary>
            /// Desc:
-           /// Default:NULL
-           /// Nullable:True
+           /// Default:
+           /// Nullable:False
            /// </summary>           
-           public string title {get;set;}
+           public int tag_id {get;set;}
 
            /// <summary>
            /// Desc:
-           /// Default:NULL
-           /// Nullable:True
+           /// Default:
+           /// Nullable:False
            /// </summary>           
-           public string editor {get;set;}
+           public int comic_id {get;set;}
 
            /// <summary>
-           /// Desc:
-           /// Default:NULL
-           /// Nullable:True
+           /// Desc:章节数
+           /// Default:0
+           /// Nullable:False
            /// </summary>           
-           public string type {get;set;}
-
-           /// <summary>
-           /// Desc:
-           /// Default:NULL
-           /// Nullable:True
-           /// </summary>           
-           public string description {get;set;}
+           public int count {get;set;}
 
            /// <summary>
            /// Desc:
@@ -70,14 +62,42 @@ namespace Sugar.Enties
            /// Default:NULL
            /// Nullable:True
            /// </summary>           
+           public string description {get;set;}
+
+           /// <summary>
+           /// Desc:
+           /// Default:NULL
+           /// Nullable:True
+           /// </summary>           
+           public string editor {get;set;}
+
+           /// <summary>
+           /// Desc:
+           /// Default:NULL
+           /// Nullable:True
+           /// </summary>           
+           public string title {get;set;}
+
+           /// <summary>
+           /// Desc:
+           /// Default:NULL
+           /// Nullable:True
+           /// </summary>           
+           public string type {get;set;}
+
+           /// <summary>
+           /// Desc:
+           /// Default:NULL
+           /// Nullable:True
+           /// </summary>           
            public DateTime? update_date {get;set;}
 
            /// <summary>
-           /// Desc:章节数
-           /// Default:0
+           /// Desc:
+           /// Default:
            /// Nullable:False
            /// </summary>           
-           public int count {get;set;}
+           public string name {get;set;}
 
     }
 }

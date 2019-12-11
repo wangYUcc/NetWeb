@@ -6,21 +6,20 @@ using SqlSugar;
 namespace Sugar.Enties
 {
     ///<summary>
-    ///
+    ///VIEW
     ///</summary>
-    [SugarTable("user")]
-    public partial class user
+    [SugarTable("view_user_role")]
+    public partial class view_user_role
     {
-           public user(){
+           public view_user_role(){
 
 
            }
            /// <summary>
            /// Desc:
-           /// Default:
+           /// Default:0
            /// Nullable:False
            /// </summary>           
-           [SugarColumn(IsPrimaryKey=true,IsIdentity=true)]
            public int id {get;set;}
 
            /// <summary>
@@ -35,7 +34,7 @@ namespace Sugar.Enties
            /// Default:
            /// Nullable:False
            /// </summary>           
-           public string password {get;set;}
+           public string name {get;set;}
 
     }
 }

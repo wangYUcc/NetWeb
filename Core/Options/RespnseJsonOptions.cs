@@ -7,8 +7,10 @@ namespace Core.Options
 {
   public static class RespnseJsonOptions
   {
-    public static Object Get(int code,object content){
-      return new { Code = code, Content = content };
+    public static Object Get(int code,string info="操作成功", object content = null)
+    {
+      // return new { Code = code, Info=info, Content = content };
+      return content ;
     }
   }
 }

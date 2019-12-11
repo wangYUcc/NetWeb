@@ -8,10 +8,10 @@ namespace Sugar.Enties
     ///<summary>
     ///
     ///</summary>
-    [SugarTable("user")]
-    public partial class user
+    [SugarTable("token")]
+    public partial class tokens
     {
-           public user(){
+           public tokens(){
 
 
            }
@@ -20,22 +20,22 @@ namespace Sugar.Enties
            /// Default:
            /// Nullable:False
            /// </summary>           
-           [SugarColumn(IsPrimaryKey=true,IsIdentity=true)]
+           [SugarColumn(IsPrimaryKey=true)]
            public int id {get;set;}
 
            /// <summary>
            /// Desc:
-           /// Default:
-           /// Nullable:False
+           /// Default:NULL
+           /// Nullable:True
            /// </summary>           
-           public string email {get;set;}
+           public string token {get;set;}
 
            /// <summary>
            /// Desc:
-           /// Default:
-           /// Nullable:False
+           /// Default:NULL
+           /// Nullable:True
            /// </summary>           
-           public string password {get;set;}
+           public int? user_id {get;set;}
 
     }
 }

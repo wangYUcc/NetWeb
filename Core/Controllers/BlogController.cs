@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Service.Interface;
@@ -8,8 +9,9 @@ using Sugar.Enties;
 
 namespace Core.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
+  // [EnableCors("CorsPolicy")]
+  [Route("api/[controller]")]
+  [ApiController]
   public class BlogController : Controller
   {
     private readonly SqlSugarClient _conn;
@@ -24,8 +26,10 @@ namespace Core.Controllers
     {
       try
       {
-        var User = _conn.Queryable<blog>().First();
-        return Ok(User);
+        var model = _conn.Queryable<blog>().InSingle(id);
+        if (model == null)
+          return BadRequest(Options.RespnseJsonOptions.Get(400, "请求失败"));
+        return Ok(Options.RespnseJsonOptions.Get(200, "请求成功", model));
       }
       catch
       {
@@ -39,7 +43,7 @@ namespace Core.Controllers
     [HttpGet("getall")]
     public IActionResult GetAll()
     {
-      List<blog> listUser = null;
+      List<blog> listmodel = null;
       /**条件过滤值**/
       var attr = Request.Query["attr"];                                          //类型 
       var serach = Request.Query["serach"];                            //搜索值 
@@ -60,7 +64,7 @@ namespace Core.Controllers
         try
         {
           /**分页查询**/
-          listUser = _conn.Queryable<blog>().OrderBy(blog => blog.id)
+          listmodel = _conn.Queryable<blog>().OrderBy(blog => blog.id)
             .ToPageList(Convert.ToInt32(pageIndex), Convert.ToInt32(pageSize));
 
         }
@@ -76,7 +80,7 @@ namespace Core.Controllers
         try
         {
           /**过滤查询**/
-          listUser = _conn.Queryable<blog>()
+          listmodel = _conn.Queryable<blog>()
             .Where(attr + "=" + serach)
             .OrderBy(item => item.id)
             .ToPageList(Convert.ToInt32(pageIndex), Convert.ToInt32(pageSize));
@@ -92,32 +96,30 @@ namespace Core.Controllers
 
       }
 
-      return Ok(listUser);
+      return Ok(listmodel);
     }
 
-    [HttpPost("{user_id}")]
-    public IActionResult Post(int user_id, [FromForm] blog blog)
+    [HttpPost]
+    public async System.Threading.Tasks.Task<IActionResult> PostAsync([FromForm] blog blog)
     {
       if (ModelState.IsValid)
       {
-        BadRequest("添加失败");
+        BadRequest(Options.RespnseJsonOptions.Get(400, "添加失败"));
       }
       try
       {
-        blog.user_id = user_id;
         int rowCount = 0;
-        rowCount = _conn.Insertable<blog>(blog).ExecuteCommand();
+        rowCount = await _conn.Insertable<blog>(blog).ExecuteReturnIdentityAsync();
         if (rowCount == 0)
         {
-          return BadRequest("blog添加失败");
+          return BadRequest(Options.RespnseJsonOptions.Get(400, "blog添加失败"));
         }
       }
       catch (Exception ex)
       {
         _logger.LogError(1001, ex, "blog提交错误 数据:" + blog.ObjToString());
-        return BadRequest("发生异常，blog添加失败");
+        return BadRequest(Options.RespnseJsonOptions.Get(400, "发生异常，blog添加失败"));
       }
-
       return Ok(Options.RespnseJsonOptions.Get(200, "成功创建"));
     }
 
@@ -128,7 +130,7 @@ namespace Core.Controllers
       try
       {
         if (_conn.Queryable<blog>().Where(it => it.id == id).First() == null)
-          return BadRequest("id 对应数据不存在");
+          return BadRequest(Options.RespnseJsonOptions.Get(400, "id 对应数据不存在"));
       }
       catch
       {
@@ -150,10 +152,24 @@ namespace Core.Controllers
         }
       }
 
-      return BadRequest("更新失败");
+      return BadRequest(Options.RespnseJsonOptions.Get(400, "更新失败"));
 
     }
 
+    [HttpDelete("{id}")]
+    public IActionResult Delete(int id)
+    {
+      try
+      {
+        if (_conn.Deleteable<blog>().With(SqlWith.RowLock).In(id).ExecuteCommand() > 0)
+          return Ok(Options.RespnseJsonOptions.Get(200, "成功创建"));
+      }
+      catch
+      {
+        _logger.LogError("删除失败");
+        throw;
+      }
+      return BadRequest(Options.RespnseJsonOptions.Get(400, "删除失败"));
+    }
   }
-
 }

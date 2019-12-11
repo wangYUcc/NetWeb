@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Service.Interface;
@@ -8,9 +9,10 @@ using Sugar.Enties;
 
 namespace Core.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class UserInfoController : Controller
+  // [EnableCors("CorsPolicy")]
+  [Route("api/[controller]")]
+  [ApiController]
+  public class UserInfoController : Controller
   {
     private readonly SqlSugarClient _conn;
     private readonly ILogger<UserInfoController> _logger;
@@ -24,8 +26,10 @@ namespace Core.Controllers
     {
       try
       {
-        var User = _conn.Queryable<user_infor>().First();
-        return Ok(User);
+        var model = _conn.Queryable<user_infor>().InSingle(id);
+        if (model == null)
+          return BadRequest(Options.RespnseJsonOptions.Get(400, "请求失败"));
+        return Ok(Options.RespnseJsonOptions.Get(200, "请求成功", model));
       }
       catch
       {
@@ -39,7 +43,7 @@ namespace Core.Controllers
     [HttpGet("getall")]
     public IActionResult GetAll()
     {
-      List<user_infor> listUser = null;
+      List<user_infor> listmodel = null;
       /**条件过滤值**/
       var attr = Request.Query["attr"];                                          //类型 
       var serach = Request.Query["serach"];                            //搜索值 
@@ -60,7 +64,7 @@ namespace Core.Controllers
         try
         {
           /**分页查询**/
-          listUser = _conn.Queryable<user_infor>().OrderBy(user_infor => user_infor.id)
+          listmodel = _conn.Queryable<user_infor>().OrderBy(user_infor => user_infor.id)
             .ToPageList(Convert.ToInt32(pageIndex), Convert.ToInt32(pageSize));
 
         }
@@ -76,7 +80,7 @@ namespace Core.Controllers
         try
         {
           /**过滤查询**/
-          listUser = _conn.Queryable<user_infor>()
+          listmodel = _conn.Queryable<user_infor>()
             .Where(attr + "=" + serach)
             .OrderBy(item => item.id)
             .ToPageList(Convert.ToInt32(pageIndex), Convert.ToInt32(pageSize));
@@ -92,32 +96,30 @@ namespace Core.Controllers
 
       }
 
-      return Ok(listUser);
+      return Ok(listmodel);
     }
 
-    [HttpPost("{user_id}")]
-    public IActionResult Post(int user_id, [FromForm] user_infor user_infor)
+    [HttpPost]
+    public IActionResult Post([FromForm] user_infor user_infor)
     {
       if (ModelState.IsValid)
       {
-        BadRequest("添加失败");
+        BadRequest(Options.RespnseJsonOptions.Get(400, "添加失败"));
       }
       try
       {
-        user_infor.user_id = user_id;
         int rowCount = 0;
         rowCount = _conn.Insertable<user_infor>(user_infor).ExecuteCommand();
         if (rowCount == 0)
         {
-          return BadRequest("user_infor添加失败");
+          return BadRequest(Options.RespnseJsonOptions.Get(400, "user_infor添加失败"));
         }
       }
       catch (Exception ex)
       {
         _logger.LogError(1001, ex, "user_infor提交错误 数据:" + user_infor.ObjToString());
-        return BadRequest("发生异常，user_infor添加失败");
+        return BadRequest(Options.RespnseJsonOptions.Get(400, "发生异常，user_infor添加失败"));
       }
-      
       return Ok(Options.RespnseJsonOptions.Get(200, "成功创建"));
     }
 
@@ -128,7 +130,7 @@ namespace Core.Controllers
       try
       {
         if (_conn.Queryable<user_infor>().Where(it => it.id == id).First() == null)
-          return BadRequest("id 对应数据不存在");
+          return BadRequest(Options.RespnseJsonOptions.Get(400, "id 对应数据不存在"));
       }
       catch
       {
@@ -150,11 +152,24 @@ namespace Core.Controllers
         }
       }
 
-      return BadRequest("更新失败");
+      return BadRequest(Options.RespnseJsonOptions.Get(400, "更新失败"));
 
     }
 
+    [HttpDelete("{id}")]
+    public IActionResult Delete(int id)
+    {
+      try
+      {
+        if (_conn.Deleteable<user_infor>().With(SqlWith.RowLock).In(id).ExecuteCommand() > 0)
+          return Ok(Options.RespnseJsonOptions.Get(200, "成功创建"));
+      }
+      catch
+      {
+        _logger.LogError("删除失败");
+        throw;
+      }
+      return BadRequest(Options.RespnseJsonOptions.Get(400, "删除失败"));
+    }
   }
-
-
 }

@@ -6,57 +6,56 @@ using SqlSugar;
 namespace Sugar.Enties
 {
     ///<summary>
-    ///
+    ///VIEW
     ///</summary>
-    [SugarTable("chapter")]
-    public partial class chapter
+    [SugarTable("view_permission_role")]
+    public partial class view_permission_role
     {
-           public chapter(){
+           public view_permission_role(){
 
 
            }
            /// <summary>
            /// Desc:
-           /// Default:
+           /// Default:0
            /// Nullable:False
            /// </summary>           
-           [SugarColumn(IsPrimaryKey=true)]
            public int id {get;set;}
 
            /// <summary>
            /// Desc:
-           /// Default:NULL
-           /// Nullable:True
-           /// </summary>           
-           public string name {get;set;}
-
-           /// <summary>
-           /// Desc:页数
            /// Default:0
            /// Nullable:False
            /// </summary>           
-           public int count {get;set;}
+           public int role_id {get;set;}
+
+           /// <summary>
+           /// Desc:
+           /// Default:0
+           /// Nullable:False
+           /// </summary>           
+           public int permission_id {get;set;}
 
            /// <summary>
            /// Desc:
            /// Default:
            /// Nullable:False
            /// </summary>           
-           public int number {get;set;}
-
-           /// <summary>
-           /// Desc:
-           /// Default:NULL
-           /// Nullable:True
-           /// </summary>           
-           public string dir {get;set;}
+           public string href {get;set;}
 
            /// <summary>
            /// Desc:
            /// Default:
            /// Nullable:False
            /// </summary>           
-           public int comic_id {get;set;}
+           public string permission_name {get;set;}
+
+           /// <summary>
+           /// Desc:
+           /// Default:
+           /// Nullable:False
+           /// </summary>           
+           public string role_name {get;set;}
 
     }
 }

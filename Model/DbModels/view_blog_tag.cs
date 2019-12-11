@@ -6,29 +6,35 @@ using SqlSugar;
 namespace Sugar.Enties
 {
     ///<summary>
-    ///
+    ///VIEW
     ///</summary>
-    [SugarTable("comic")]
-    public partial class comic
+    [SugarTable("view_blog_tag")]
+    public partial class view_blog_tag
     {
-           public comic(){
+           public view_blog_tag(){
 
 
            }
            /// <summary>
            /// Desc:
-           /// Default:
-           /// Nullable:False
-           /// </summary>           
-           [SugarColumn(IsPrimaryKey=true,IsIdentity=true)]
-           public int id {get;set;}
-
-           /// <summary>
-           /// Desc:
            /// Default:NULL
            /// Nullable:True
            /// </summary>           
-           public string title {get;set;}
+           public string content {get;set;}
+
+           /// <summary>
+           /// Desc:
+           /// Default:
+           /// Nullable:False
+           /// </summary>           
+           public DateTime create_time {get;set;}
+
+           /// <summary>
+           /// Desc:
+           /// Default:
+           /// Nullable:False
+           /// </summary>           
+           public string description {get;set;}
 
            /// <summary>
            /// Desc:
@@ -39,45 +45,45 @@ namespace Sugar.Enties
 
            /// <summary>
            /// Desc:
-           /// Default:NULL
-           /// Nullable:True
+           /// Default:
+           /// Nullable:False
            /// </summary>           
-           public string type {get;set;}
+           public string title {get;set;}
 
            /// <summary>
            /// Desc:
-           /// Default:NULL
-           /// Nullable:True
+           /// Default:
+           /// Nullable:False
            /// </summary>           
-           public string description {get;set;}
+           public DateTime update_time {get;set;}
 
            /// <summary>
            /// Desc:
-           /// Default:NULL
-           /// Nullable:True
+           /// Default:
+           /// Nullable:False
            /// </summary>           
-           public string cover {get;set;}
+           public string name {get;set;}
 
            /// <summary>
            /// Desc:
-           /// Default:NULL
-           /// Nullable:True
-           /// </summary>           
-           public DateTime? create_date {get;set;}
-
-           /// <summary>
-           /// Desc:
-           /// Default:NULL
-           /// Nullable:True
-           /// </summary>           
-           public DateTime? update_date {get;set;}
-
-           /// <summary>
-           /// Desc:章节数
            /// Default:0
            /// Nullable:False
            /// </summary>           
-           public int count {get;set;}
+           public int blog_id {get;set;}
+
+           /// <summary>
+           /// Desc:
+           /// Default:0
+           /// Nullable:False
+           /// </summary>           
+           public int tag_id {get;set;}
+
+           /// <summary>
+           /// Desc:
+           /// Default:0
+           /// Nullable:False
+           /// </summary>           
+           public int id {get;set;}
 
     }
 }

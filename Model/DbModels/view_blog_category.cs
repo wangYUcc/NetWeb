@@ -20,7 +20,7 @@ namespace Sugar.Enties
            /// Default:0
            /// Nullable:False
            /// </summary>           
-           public int id {get;set;}
+           public int blog_id {get;set;}
 
            /// <summary>
            /// Desc:
@@ -83,7 +83,7 @@ namespace Sugar.Enties
            /// Default:0
            /// Nullable:False
            /// </summary>           
-           public int middle_table_id {get;set;}
+           public int id {get;set;}
 
     }
 }

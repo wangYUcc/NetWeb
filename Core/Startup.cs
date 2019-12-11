@@ -31,6 +31,15 @@ namespace Core
       services.AddSingleton<IConnectionDatabase<SqlSugarClient>>(new SqlSugarConnectDBService(Configuration.GetConnectionString("Mariadb")));
       services.AddHangfire(Configuration.GetConnectionString("Mariadb"));
       services.AddJWT(Configuration);
+      services.AddCors(options =>
+      {
+        options.AddPolicy("CorsPolicy",
+            builder => builder.AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials());
+      });
+
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -44,6 +53,7 @@ namespace Core
       {
         app.UseHsts();
       }
+      app.UseCors("CorsPolicy");
       app.UseAuthentication();
       //  app.UseSerilogRequestLogging(); 
       app.UseHttpsRedirection();
