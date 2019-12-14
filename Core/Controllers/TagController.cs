@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
@@ -36,7 +37,12 @@ namespace Core.Controllers
         _logger.LogDebug(" tag 查询错误");
         throw;
       }
+      finally
+      {
+        _conn.Close();
+      }
     }
+    
 
 
     // 分页操作
@@ -100,17 +106,17 @@ namespace Core.Controllers
     }
 
     [HttpPost]
-    public async System.Threading.Tasks.Task<IActionResult> PostAsync([FromForm] tag model)
+    public async System.Threading.Tasks.Task<IActionResult> PostAsync([FromBody] tag model)
     {
-      if (ModelState.IsValid)
+      if (!ModelState.IsValid)
       {
         BadRequest(Options.RespnseJsonOptions.Get(400, "添加失败"));
       }
       try
       {
-        int rowCount = 0;
-        rowCount = await _conn.Insertable<tag>(model).ExecuteReturnIdentityAsync();
-        if (rowCount == 0)
+        int id = 0;
+        id = await _conn.Insertable<tag>(model).ExecuteReturnIdentityAsync();
+        if (id == 0)
         {
           return BadRequest(Options.RespnseJsonOptions.Get(400, "tag添加失败"));
         }
@@ -138,7 +144,7 @@ namespace Core.Controllers
       }
 
       model.id = id;
-      if (!ModelState.IsValid)
+      if (ModelState.IsValid)
       {
         try
         {
@@ -171,5 +177,37 @@ namespace Core.Controllers
       }
       return BadRequest(Options.RespnseJsonOptions.Get(400, "删除失败"));
     }
+
+
+    [HttpGet("getStruct")]
+    public  IActionResult GetTagStruct()
+    {
+      ArrayList items = new ArrayList();
+      try
+      {
+
+        var dt = _conn.Ado.GetDataTable(
+         "select column_name,column_default,is_nullable,data_type from information_schema.columns " +
+         "where table_name = @tableName and table_schema = @scheme; ",
+         new SugarParameter[]{
+                      new SugarParameter("@tableName","tag"),
+                      new SugarParameter("@scheme","netapp")
+        });
+        var rows = dt.Rows;
+        
+        for (int i = 0; i < rows.Count; i++)
+        {
+          items.Add(rows[i].ItemArray);
+        }
+      }
+      catch(Exception e)
+      {
+        _logger.LogError("查询表结构失败");
+      }
+      return Ok(Options.RespnseJsonOptions.Get(200, "查询成功",new { items } ));
+    }
+
+
   }
+
 }

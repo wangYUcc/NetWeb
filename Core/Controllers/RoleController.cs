@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
@@ -55,8 +56,36 @@ namespace Core.Controllers
           .OrderBy(item => item.id).ToSql();
           _logger.LogError(1002, ex, " 过滤查询 " + sql.Value );
         }
+      return Ok(Options.RespnseJsonOptions.Get(200, "请求成功", listmodel));
 
-      return Ok(listmodel);
+     
+    }
+    [HttpGet("getStruct")]
+    public IActionResult GetTagStruct()
+    {
+      ArrayList items = new ArrayList();
+      try
+      {
+
+        var dt = _conn.Ado.GetDataTable(
+         "select column_name,column_default,is_nullable,data_type from information_schema.columns " +
+         "where table_name = @tableName and table_schema = @scheme; ",
+         new SugarParameter[]{
+                      new SugarParameter("@tableName","role"),
+                      new SugarParameter("@scheme","netapp")
+        });
+        var rows = dt.Rows;
+
+        for (int i = 0; i < rows.Count; i++)
+        {
+          items.Add(rows[i].ItemArray);
+        }
+      }
+      catch (Exception e)
+      {
+        _logger.LogError("查询表结构失败");
+      }
+      return Ok(Options.RespnseJsonOptions.Get(200, "查询成功", new { items }));
     }
 
     [HttpPost]

@@ -94,6 +94,30 @@ namespace XUnitTest
   
     }
 
+    [Fact]
+    void GetTableStruct()
+    {
 
+
+      var dt = _conn.Ado.GetDataTable(
+        "select column_name,is_nullable,data_type ,column_default " +
+        "from information_schema.columns where" +
+        " table_name = @tableName and table_schema = @scheme; "
+      , new SugarParameter[]{
+      new SugarParameter("@tableName","tag"),
+      new SugarParameter("@scheme","netapp")
+      });
+
+       dt = _conn.Ado.GetDataTable(
+         "select column_name,is_nullable,data_type from,column_default information_schema.columns " +
+         "where table_name = @tableName and table_schema = @scheme; ",
+         new SugarParameter[]{
+                      new SugarParameter("@tableName","tag"),
+                      new SugarParameter("@scheme","netapp")
+        });
+      var rows=dt.Rows;
+     Array a= rows[0].ItemArray;
+       
+    }
   }
 }

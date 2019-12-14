@@ -9,8 +9,8 @@ namespace Core.Options
   {
     public static Object Get(int code,string info="操作成功", object content = null)
     {
-      // return new { Code = code, Info=info, Content = content };
-      return content ;
+      return new { Code = code, Info=info, Content = content };
+     // return content ;
     }
   }
 }
