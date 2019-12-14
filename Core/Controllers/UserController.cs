@@ -9,7 +9,7 @@ using Sugar.Enties;
 
 namespace Core.Controllers
 {
- // [EnableCors("CorsPolicy")]
+  // [EnableCors("CorsPolicy")]
   [Route("api/[controller]")]
   [ApiController]
   public class UserController : Controller
@@ -29,7 +29,7 @@ namespace Core.Controllers
         var model = _conn.Queryable<user>().InSingle(id);
         if (model == null)
           return BadRequest(Options.RespnseJsonOptions.Get(400, "请求失败"));
-        return Ok(Options.RespnseJsonOptions.Get(200,"请求成功", model));
+        return Ok(Options.RespnseJsonOptions.Get(200, "请求成功", model));
       }
       catch
       {
@@ -100,7 +100,7 @@ namespace Core.Controllers
     }
 
     [HttpPost]
-    public async System.Threading.Tasks.Task<IActionResult> PostAsync([FromForm] user model)
+    public async System.Threading.Tasks.Task<IActionResult> PostAsync([FromBody] user model)
     {
       if (!ModelState.IsValid)
       {
@@ -108,9 +108,9 @@ namespace Core.Controllers
       }
       try
       {
-        int rowCount = 0;
-        rowCount = await _conn.Insertable<user>(model).ExecuteReturnIdentityAsync();
-        if (rowCount == 0)
+        int id = 0;
+        id = await _conn.Insertable<user>(model).ExecuteReturnIdentityAsync();
+        if (id == 0)
         {
           return BadRequest(Options.RespnseJsonOptions.Get(400, "user添加失败"));
         }
@@ -126,7 +126,7 @@ namespace Core.Controllers
     [HttpPut("{id}")]
     public IActionResult Put(int id, [FromBody] user model)
     {
-      
+
       try
       {
         if (_conn.Queryable<user>().Where(it => it.id == id).First() == null)
@@ -155,15 +155,17 @@ namespace Core.Controllers
       return BadRequest(Options.RespnseJsonOptions.Get(400, "更新失败"));
 
     }
-    
+
     [HttpDelete("{id}")]
     public IActionResult Delete(int id)
     {
-      try{
-       if( _conn.Deleteable<user>().With(SqlWith.RowLock).In(id).ExecuteCommand()>0)
-             return Ok(Options.RespnseJsonOptions.Get(200, "成功创建"));
+      try
+      {
+        if (_conn.Deleteable<user>().With(SqlWith.RowLock).In(id).ExecuteCommand() > 0)
+          return Ok(Options.RespnseJsonOptions.Get(200, "成功创建"));
       }
-      catch{
+      catch
+      {
         _logger.LogError("删除失败");
         throw;
       }

@@ -62,6 +62,7 @@ namespace Core.Controllers.Auth
 
       return BadRequest("用户名密码错误");
     }
+    [HttpPost]
 
     public IActionResult Registe([FromForm] user Form)
     {

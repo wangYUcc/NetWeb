@@ -28,7 +28,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jop", "Jop\Jop.csproj", "{B
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PocoClassGenerator", "..\PocoClassGenerator-master\PocoClassGenerator-master\PocoClassGenerator\PocoClassGenerator\PocoClassGenerator.csproj", "{3980244F-4B81-45BE-942B-83D79D924A95}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Model", "Model\Model.csproj", "{A124E2DD-7F00-4F21-B8D6-683D6BC1FE45}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Model", "Model\Model.csproj", "{A124E2DD-7F00-4F21-B8D6-683D6BC1FE45}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Statics", "Statics", "{96314476-3FCD-4AC5-A3CA-A403D44A678C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -9,8 +9,9 @@
   <ItemGroup>
     <Folder Include="Interface\" />
     <Folder Include="Provider\" />
-    <Folder Include="wwwroot\" />
     <Folder Include="Attributes\" />
+    <Folder Include="wwwroot\Comic\" />
+    <Folder Include="wwwroot\ComicCover\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -18,6 +19,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.4.10" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.9" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0-rc4" />
   </ItemGroup>
 
   <ItemGroup>

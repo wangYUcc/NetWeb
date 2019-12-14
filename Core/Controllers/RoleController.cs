@@ -43,58 +43,18 @@ namespace Core.Controllers
     [HttpGet("getall")]
     public IActionResult GetAll()
     {
-      List<role> listmodel = null;
-      /**条件过滤值**/
-      var attr = Request.Query["attr"];                                          //类型 
-      var serach = Request.Query["serach"];                            //搜索值 
-      var pageIndex = Request.Query["pageIndex"];               //偏移
-      var pageSize = Request.Query["pageSize"];                              // 列数
-
-      if (string.IsNullOrEmpty(pageIndex))
-      {
-        pageIndex = "0";
-      }
-      if (string.IsNullOrEmpty(pageSize))
-      {
-        pageSize = "10";
-      }
-
-      if (string.IsNullOrEmpty(serach) && string.IsNullOrEmpty(attr))
-      {
+      List<role> listmodel = null;   
         try
         {
-          /**分页查询**/
-          listmodel = _conn.Queryable<role>().OrderBy(role => role.id)
-            .ToPageList(Convert.ToInt32(pageIndex), Convert.ToInt32(pageSize));
-
+        /**分页查询**/
+        listmodel = _conn.Queryable<role>().OrderBy(role => role.id).ToList();
         }
         catch (Exception ex)
         {
           var sql = _conn.Queryable<role>()
           .OrderBy(item => item.id).ToSql();
-          _logger.LogError(1002, ex, " 过滤查询 " + sql.Value + "limit " + pageIndex + " " + pageSize);
+          _logger.LogError(1002, ex, " 过滤查询 " + sql.Value );
         }
-      }
-      else
-      {
-        try
-        {
-          /**过滤查询**/
-          listmodel = _conn.Queryable<role>()
-            .Where(attr + "=" + serach)
-            .OrderBy(item => item.id)
-            .ToPageList(Convert.ToInt32(pageIndex), Convert.ToInt32(pageSize));
-        }
-        catch (Exception ex)
-        {
-          var sql = _conn.Queryable<role>()
-            .Where(attr + "=" + serach)
-            .OrderBy(item => item.id).ToSql();
-          _logger.LogError(1002, ex, " 过滤查询 " + sql.Value + "limit " + pageIndex + " " + pageSize);
-        }
-
-
-      }
 
       return Ok(listmodel);
     }

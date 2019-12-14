@@ -21,12 +21,12 @@ namespace Core.Controllers
       _conn = conn.GetConnect();
       _logger = logger;
     }
-    [HttpGet("{id}")]
-    public IActionResult Get(int id)
+    [HttpGet("{userid}")]
+    public IActionResult Get(int userid)
     {
       try
       {
-        var model = _conn.Queryable<user_infor>().InSingle(id);
+        var model = _conn.Queryable<user_infor>().Where(it => it.user_id == userid).First();
         if (model == null)
           return BadRequest(Options.RespnseJsonOptions.Get(400, "请求失败"));
         return Ok(Options.RespnseJsonOptions.Get(200, "请求成功", model));
@@ -99,77 +99,38 @@ namespace Core.Controllers
       return Ok(listmodel);
     }
 
-    [HttpPost]
-    public IActionResult Post([FromForm] user_infor user_infor)
+    [HttpPut("{userid}")]
+    public IActionResult Put(int userid, [FromBody] user_infor user_infor)
     {
-      if (ModelState.IsValid)
-      {
-        BadRequest(Options.RespnseJsonOptions.Get(400, "添加失败"));
-      }
       try
       {
-        int rowCount = 0;
-        rowCount = _conn.Insertable<user_infor>(user_infor).ExecuteCommand();
-        if (rowCount == 0)
-        {
-          return BadRequest(Options.RespnseJsonOptions.Get(400, "user_infor添加失败"));
-        }
-      }
-      catch (Exception ex)
-      {
-        _logger.LogError(1001, ex, "user_infor提交错误 数据:" + user_infor.ObjToString());
-        return BadRequest(Options.RespnseJsonOptions.Get(400, "发生异常，user_infor添加失败"));
-      }
-      return Ok(Options.RespnseJsonOptions.Get(200, "成功创建"));
-    }
-
-    [HttpPut("{id}")]
-    public IActionResult Put(int id, [FromBody] user_infor user_infor)
-    {
-
-      try
-      {
-        if (_conn.Queryable<user_infor>().Where(it => it.id == id).First() == null)
+        var info = _conn.Queryable<user_infor>().Where(it => it.user_id == userid).First();
+        if (info == null)
           return BadRequest(Options.RespnseJsonOptions.Get(400, "id 对应数据不存在"));
+
+        user_infor.id = info.id;
       }
       catch
       {
         _logger.LogError("异常查询");
       }
 
-      user_infor.id = id;
       if (!ModelState.IsValid)
       {
-        try
-        {
-          int i = _conn.Updateable<user_infor>(user_infor).ExecuteCommand();
-          return Ok(Options.RespnseJsonOptions.Get(200, "更新成功"));
-        }
-        catch (Exception ex)
-        {
-          _logger.LogError("异常更新");
-
-        }
+        return BadRequest(Options.RespnseJsonOptions.Get(400, "数据格式不合规范"));
       }
 
-      return BadRequest(Options.RespnseJsonOptions.Get(400, "更新失败"));
-
-    }
-
-    [HttpDelete("{id}")]
-    public IActionResult Delete(int id)
-    {
       try
       {
-        if (_conn.Deleteable<user_infor>().With(SqlWith.RowLock).In(id).ExecuteCommand() > 0)
-          return Ok(Options.RespnseJsonOptions.Get(200, "成功创建"));
+        if (_conn.Updateable<user_infor>(user_infor).ExecuteCommand() > 0)
+          return Ok(Options.RespnseJsonOptions.Get(200, "更新成功"));
+        return Ok(Options.RespnseJsonOptions.Get(200, "没有内容更新"));
       }
-      catch
+      catch (Exception ex)
       {
-        _logger.LogError("删除失败");
-        throw;
+        _logger.LogError("异常更新");
       }
-      return BadRequest(Options.RespnseJsonOptions.Get(400, "删除失败"));
+      return BadRequest(Options.RespnseJsonOptions.Get(400, "更新失败"));
     }
   }
 }
