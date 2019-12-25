@@ -10,7 +10,7 @@ namespace Sugar.Enties
     ///</summary>
     [SugarTable("category")]
     public partial class category
-    {
+  {
            public category(){
 
 

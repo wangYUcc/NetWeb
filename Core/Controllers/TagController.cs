@@ -108,9 +108,11 @@ namespace Core.Controllers
     [HttpPost]
     public async System.Threading.Tasks.Task<IActionResult> PostAsync([FromBody] tag model)
     {
-      if (!ModelState.IsValid)
+      
+      if (!ModelState.IsValid || string.IsNullOrEmpty(model.name) || model.name.ToLower()=="null")
       {
-        BadRequest(Options.RespnseJsonOptions.Get(400, "添加失败"));
+     return   BadRequest(Options.RespnseJsonOptions.Get(400, "添加失败"));
+        
       }
       try
       {

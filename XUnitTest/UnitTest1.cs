@@ -17,6 +17,7 @@ namespace XUnitTest
     public UnitTest1(ITestOutputHelper tempOutput)
     {
       Output = tempOutput;
+     
     }
 
 

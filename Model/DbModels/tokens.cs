@@ -8,10 +8,10 @@ namespace Sugar.Enties
     ///<summary>
     ///
     ///</summary>
-    [SugarTable("access_log")]
-    public partial class access_log
+    [SugarTable("tokens")]
+    public partial class tokens
     {
-           public access_log(){
+           public tokens(){
 
 
            }
@@ -25,24 +25,17 @@ namespace Sugar.Enties
 
            /// <summary>
            /// Desc:
-           /// Default:
-           /// Nullable:False
+           /// Default:NULL
+           /// Nullable:True
            /// </summary>           
-           public string ip {get;set;}
-
-           /// <summary>
-           /// Desc:
-           /// Default:
-           /// Nullable:False
-           /// </summary>           
-           public DateTime create_date {get;set;}
+           public string token {get;set;}
 
            /// <summary>
            /// Desc:
            /// Default:NULL
            /// Nullable:True
            /// </summary>           
-           public DateTime? end_date {get;set;}
+           public int? user_id {get;set;}
 
     }
 }

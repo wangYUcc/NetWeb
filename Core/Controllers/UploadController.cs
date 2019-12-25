@@ -20,10 +20,10 @@ namespace Core.Controllers
   public class UploadController : ControllerBase
   {
     private readonly SqlSugarClient _conn;
-    private readonly ILogger<UserUserInfoController> _logger;
+    private readonly ILogger<UploadController> _logger;
     private readonly IConfiguration _configuration;
     public UploadController(IConnectionDatabase<SqlSugarClient> conn, 
-      ILogger<UserUserInfoController> logger,
+      ILogger<UploadController> logger,
       IConfiguration configuration
       )
     {

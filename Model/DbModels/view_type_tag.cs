@@ -6,43 +6,49 @@ using SqlSugar;
 namespace Sugar.Enties
 {
     ///<summary>
-    ///
+    ///VIEW
     ///</summary>
-    [SugarTable("Jop__Counter")]
-    public partial class Jop__Counter
+    [SugarTable("view_type_tag")]
+    public partial class view_type_tag
     {
-           public Jop__Counter(){
+           public view_type_tag(){
 
 
            }
            /// <summary>
            /// Desc:
-           /// Default:
+           /// Default:0
            /// Nullable:False
            /// </summary>           
-           [SugarColumn(IsPrimaryKey=true,IsIdentity=true)]
-           public int Id {get;set;}
+           public int id {get;set;}
 
            /// <summary>
            /// Desc:
            /// Default:
            /// Nullable:False
            /// </summary>           
-           public string Key {get;set;}
+           public int type_id {get;set;}
 
            /// <summary>
            /// Desc:
            /// Default:
            /// Nullable:False
            /// </summary>           
-           public int Value {get;set;}
+           public int tag_id {get;set;}
 
            /// <summary>
            /// Desc:
            /// Default:NULL
            /// Nullable:True
            /// </summary>           
-           public DateTime? ExpireAt {get;set;}
+           public string type_name {get;set;}
+
+           /// <summary>
+           /// Desc:
+           /// Default:
+           /// Nullable:False
+           /// </summary>           
+           public string tag_name {get;set;}
 
     }
 }

@@ -162,7 +162,7 @@ namespace Core.Controllers
       try
       {
         if (_conn.Deleteable<user>().With(SqlWith.RowLock).In(id).ExecuteCommand() > 0)
-          return Ok(Options.RespnseJsonOptions.Get(200, "成功创建"));
+          return Ok(Options.RespnseJsonOptions.Get(200, "成功删除"));
       }
       catch
       {

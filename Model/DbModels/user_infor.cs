@@ -8,7 +8,7 @@ namespace Sugar.Enties
     ///<summary>
     ///
     ///</summary>
-    [SugarTable("user_infor")]
+    [SugarTable("user_info")]
     public partial class user_infor
     {
            public user_infor(){
@@ -50,7 +50,13 @@ namespace Sugar.Enties
            /// Nullable:False
            /// </summary>           
            public int user_id {get;set;}
-    public int role_id { get; set; }
 
-  }
+           /// <summary>
+           /// Desc:
+           /// Default:1
+           /// Nullable:False
+           /// </summary>           
+           public int role_id {get;set;}
+
+    }
 }

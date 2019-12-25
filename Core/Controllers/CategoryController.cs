@@ -26,7 +26,7 @@ namespace Core.Controllers
     {
       try
       {
-        var model = _conn.Queryable<category>().InSingle(id);
+        var model = _conn.Queryable<tag>().InSingle(id);
         if (model == null)
           return BadRequest(Options.RespnseJsonOptions.Get(400, "请求失败"));
         return Ok(Options.RespnseJsonOptions.Get(200, "请求成功", model));
@@ -43,7 +43,7 @@ namespace Core.Controllers
     [HttpGet("getall")]
     public IActionResult GetAll()
     {
-      List<category> listmodel = null;
+      List<tag> listmodel = null;
       /**条件过滤值**/
       var attr = Request.Query["attr"];                                          //类型 
       var serach = Request.Query["serach"];                            //搜索值 
@@ -64,13 +64,13 @@ namespace Core.Controllers
         try
         {
           /**分页查询**/
-          listmodel = _conn.Queryable<category>().OrderBy(category => category.id)
+          listmodel = _conn.Queryable<tag>().OrderBy(category => category.id)
             .ToPageList(Convert.ToInt32(pageIndex), Convert.ToInt32(pageSize));
 
         }
         catch (Exception ex)
         {
-          var sql = _conn.Queryable<category>()
+          var sql = _conn.Queryable<tag>()
           .OrderBy(item => item.id).ToSql();
           _logger.LogError(1002, ex, " 过滤查询 " + sql.Value + "limit " + pageIndex + " " + pageSize);
         }
@@ -80,14 +80,14 @@ namespace Core.Controllers
         try
         {
           /**过滤查询**/
-          listmodel = _conn.Queryable<category>()
+          listmodel = _conn.Queryable<tag>()
             .Where(attr + "=" + serach)
             .OrderBy(item => item.id)
             .ToPageList(Convert.ToInt32(pageIndex), Convert.ToInt32(pageSize));
         }
         catch (Exception ex)
         {
-          var sql = _conn.Queryable<category>()
+          var sql = _conn.Queryable<tag>()
             .Where(attr + "=" + serach)
             .OrderBy(item => item.id).ToSql();
           _logger.LogError(1002, ex, " 过滤查询 " + sql.Value + "limit " + pageIndex + " " + pageSize);
@@ -100,7 +100,7 @@ namespace Core.Controllers
     }
 
     [HttpPost]
-    public async System.Threading.Tasks.Task<IActionResult> PostAsync([FromForm] category model)
+    public async System.Threading.Tasks.Task<IActionResult> PostAsync([FromForm] tag model)
     {
       if (ModelState.IsValid)
       {
@@ -109,7 +109,7 @@ namespace Core.Controllers
       try
       {
         int rowCount = 0;
-        rowCount = await _conn.Insertable<category>(model).ExecuteReturnIdentityAsync();
+        rowCount = await _conn.Insertable<tag>(model).ExecuteReturnIdentityAsync();
         if (rowCount == 0)
         {
           return BadRequest(Options.RespnseJsonOptions.Get(400, "category添加失败"));
@@ -124,12 +124,12 @@ namespace Core.Controllers
     }
 
     [HttpPut("{id}")]
-    public IActionResult Put(int id, [FromBody] category model)
+    public IActionResult Put(int id, [FromBody] tag model)
     {
 
       try
       {
-        if (_conn.Queryable<category>().Where(it => it.id == id).First() == null)
+        if (_conn.Queryable<tag>().Where(it => it.id == id).First() == null)
           return BadRequest(Options.RespnseJsonOptions.Get(400, "id 对应数据不存在"));
       }
       catch
@@ -142,7 +142,7 @@ namespace Core.Controllers
       {
         try
         {
-          int i = _conn.Updateable<category>(model).ExecuteCommand();
+          int i = _conn.Updateable<tag>(model).ExecuteCommand();
           return Ok(Options.RespnseJsonOptions.Get(200, "更新成功"));
         }
         catch (Exception ex)
@@ -161,7 +161,7 @@ namespace Core.Controllers
     {
       try
       {
-        if (_conn.Deleteable<category>().With(SqlWith.RowLock).In(id).ExecuteCommand() > 0)
+        if (_conn.Deleteable<tag>().With(SqlWith.RowLock).In(id).ExecuteCommand() > 0)
           return Ok(Options.RespnseJsonOptions.Get(200, "成功创建"));
       }
       catch

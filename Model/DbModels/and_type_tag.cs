@@ -8,10 +8,10 @@ namespace Sugar.Enties
     ///<summary>
     ///
     ///</summary>
-    [SugarTable("Jop__Set")]
-    public partial class Jop__Set
+    [SugarTable("and_type_tag")]
+    public partial class and_type_tag
     {
-           public Jop__Set(){
+           public and_type_tag(){
 
 
            }
@@ -21,35 +21,21 @@ namespace Sugar.Enties
            /// Nullable:False
            /// </summary>           
            [SugarColumn(IsPrimaryKey=true,IsIdentity=true)]
-           public int Id {get;set;}
+           public int id {get;set;}
 
            /// <summary>
            /// Desc:
            /// Default:
            /// Nullable:False
            /// </summary>           
-           public string Key {get;set;}
+           public int type_id {get;set;}
 
            /// <summary>
            /// Desc:
            /// Default:
            /// Nullable:False
            /// </summary>           
-           public string Value {get;set;}
-
-           /// <summary>
-           /// Desc:
-           /// Default:
-           /// Nullable:False
-           /// </summary>           
-           public float Score {get;set;}
-
-           /// <summary>
-           /// Desc:
-           /// Default:NULL
-           /// Nullable:True
-           /// </summary>           
-           public DateTime? ExpireAt {get;set;}
+           public int tag_id {get;set;}
 
     }
 }

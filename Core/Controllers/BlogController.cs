@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -100,24 +101,49 @@ namespace Core.Controllers
     }
 
     [HttpPost]
-    public async System.Threading.Tasks.Task<IActionResult> PostAsync([FromForm] blog blog)
+    public async System.Threading.Tasks.Task<IActionResult> PostAsync([FromBody] Formmodel blog)
     {
-      if (ModelState.IsValid)
+      if (!ModelState.IsValid)
       {
-        BadRequest(Options.RespnseJsonOptions.Get(400, "添加失败"));
+     return   BadRequest(Options.RespnseJsonOptions.Get(400, "添加失败"));
       }
       try
       {
-        int rowCount = 0;
-        rowCount = await _conn.Insertable<blog>(blog).ExecuteReturnIdentityAsync();
-        if (rowCount == 0)
+        int rowId = 0;
+        
+      blog createModel=blog;
+        rowId = await _conn.Insertable<blog>(createModel).ExecuteReturnIdentityAsync();
+        if (rowId == 0)
         {
           return BadRequest(Options.RespnseJsonOptions.Get(400, "blog添加失败"));
         }
+        var tags = new List<and_tag_blog>();
+        var tag = new and_tag_blog();
+        tag.blog_id = rowId;
+        foreach (var it in blog.tagIds)
+        {
+          tag.tag_id = it;
+          tags.Add(tag);
+        }
+       if(!(_conn.Insertable<and_tag_blog>(tags).ExecuteCommand()>0))
+          return BadRequest(Options.RespnseJsonOptions.Get(400, "blog tag 关联失败")); ;
+
+        var cates = new List<and_category_blog>();
+        var cate = new and_category_blog();
+        cate.blog_id = rowId;
+        foreach (var it in blog.cateIds)
+        {
+          cate.category_id = it;
+          cates.Add(cate);
+        }
+        if (!(_conn.Insertable<and_category_blog>(cates).ExecuteCommand() > 0))
+          return BadRequest(Options.RespnseJsonOptions.Get(400, "blog tag 关联失败")); ;
+
+      
       }
       catch (Exception ex)
       {
-        _logger.LogError(1001, ex, "blog提交错误 数据:" + blog.ObjToString());
+        _logger.LogError(1001, ex, "blog提交错误 数据:" );
         return BadRequest(Options.RespnseJsonOptions.Get(400, "发生异常，blog添加失败"));
       }
       return Ok(Options.RespnseJsonOptions.Get(200, "成功创建"));
@@ -156,7 +182,7 @@ namespace Core.Controllers
 
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("{id}")] //删除操作要处理关联关系的删除
     public IActionResult Delete(int id)
     {
       try
@@ -171,5 +197,83 @@ namespace Core.Controllers
       }
       return BadRequest(Options.RespnseJsonOptions.Get(400, "删除失败"));
     }
+
+    [HttpGet("GetCategorys")]
+    public async Task<IActionResult> GetCategorys() 
+    {
+      List<category> models = null;
+        try
+        {
+        /**过滤查询**/
+        models =   _conn.Queryable<category>().ToList();
+        }
+        catch (Exception ex)
+        {
+          _logger.LogError(1002, ex, "类别查询");
+        throw;
+        }
+      return Ok(Options.RespnseJsonOptions.Get(400, "成功返回", models));
+    }
+    [HttpGet("GetTags")]
+    public async Task<IActionResult> GetTags()
+    {
+      List<tag> models = null;
+      try
+      {
+        /**过滤查询**/
+        models =  _conn.Queryable<tag>().ToList();
+      }
+      catch (Exception ex)
+      {
+        _logger.LogError(1002, ex, "类别查询");
+        throw;
+      }
+      return Ok(Options.RespnseJsonOptions.Get(400, "成功返回", models));
+    }
+
+    [HttpPut("id")]
+    public async Task<IActionResult> SetCategorysRelationship(int id,[FromBody] List<and_category_blog> models)
+    {
+      //List<and_category_blog> models = null;
+      try
+      {
+        /**过滤查询**/
+       // models = await _conn.Queryable<and_category_blog>().Where(it=>it.blog_id== id).ToListAsync();
+        if( _conn.Updateable<and_category_blog>(models).ExecuteCommand()==0)
+          return Ok(Options.RespnseJsonOptions.Get(200, "无任何更新", models));
+
+
+      }
+      catch (Exception ex)
+      {
+        _logger.LogError(1002, ex, "类别查询");
+        throw;
+      }
+      return Ok(Options.RespnseJsonOptions.Get(200, "成功返回", models));
+    }
+
+
+    public async Task<IActionResult> SetTagsRelationship()
+    {
+      List<tag> models = null;
+      try
+      {
+        /**过滤查询**/
+        models = await _conn.Queryable<tag>().ToListAsync();
+      }
+      catch (Exception ex)
+      {
+        _logger.LogError(1002, ex, "类别查询");
+        throw;
+      }
+      return Ok(Options.RespnseJsonOptions.Get(400, "成功返回", models));
+    }
+
+  }
+
+  public class Formmodel:blog{
+    public int[] tagIds { get; set; }
+    public int[] cateIds { get; set; }
+
   }
 }
